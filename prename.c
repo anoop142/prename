@@ -48,7 +48,7 @@ int pretty_rename(char *filename){
 		int i;
 		for(i=1; isalpha(*(filename + i)) == 0 &&  i < strlen(filename); i++ );
 		/* skip if the file name is all non aplha chars*/
-		if(strchr(filename+i, '.')){
+		if((strchr(filename+i, '.')) || (strlen(filename + i) == 0) ){
 
 			char *new_filename = strndup(filename + i, strlen(filename) - i);
 			if(is_file_exist(new_filename)){
