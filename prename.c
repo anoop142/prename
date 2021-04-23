@@ -10,6 +10,7 @@ Copyright Anoop S
 #include <string.h>
 #include <glob.h>
 #include <ctype.h>
+#include<sys/stat.h>
 
 #define log_err(MESSAGE, ...) fprintf(stderr,\
         MESSAGE "\n", ##__VA_ARGS__)
@@ -33,14 +34,10 @@ int list_files(glob_t *pglob, char *pattern){
 }
 
 int is_file_exist(const char *file_name){
-	FILE *file;
+	struct stat stats;
 
-	if((file=fopen(file_name,"r")) == NULL)
-	{
-		return 0;
-	}
-	fclose(file);
-	return 1;
+	return stat(file_name, &stats);
+
 }
 
 int pretty_rename(char *filename){
@@ -51,7 +48,7 @@ int pretty_rename(char *filename){
 		if((strchr(filename+i, '.')) || (strlen(filename + i) == 0) ){
 
 			char *new_filename = strndup(filename + i, strlen(filename) - i);
-			if(is_file_exist(new_filename)){
+			if(is_file_exist(new_filename) == 0){
 				fprintf(stderr, "%s -> %s, %s exists, so skipped!\n",filename, new_filename,new_filename);
 			}
 			else{
